@@ -44,8 +44,8 @@ public class CharacterClass : MonoBehaviour
         return JumpCountMax;
     }
 
-
-     public virtual void Movement(){}
+    // CHARACTER MOVEMENT
+     public virtual Vector3 Movement(){ return Vector3.zero; }
+    // CHARACTER JUMP
      public virtual void Jump(){}
-     public virtual void GroundedCheck(){}
 }

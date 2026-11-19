@@ -9,6 +9,7 @@ public class HealthSystem : MonoBehaviour
 
     [Header("Damage")]
     [SerializeField] float DamageValue;
+    [SerializeField] float HealingValue;
     
     protected int getHealth(){
         return HealthCurrent;
@@ -17,8 +18,12 @@ public class HealthSystem : MonoBehaviour
         return HealthMax;
     }
     
-    public virtual void ApplyDamage() {}
-    public virtual void Applyhealing() {}
+    public virtual void ApplyDamage(int OtherHealth) {
+        OtherHealth -= (int)DamageValue;
+    }
+    public virtual void Applyhealing(int OtherHealth) {
+        OtherHealth += (int)HealingValue;
+    }
 
 
 }
