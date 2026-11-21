@@ -1,7 +1,7 @@
 using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
-public class PlayerCharacterClass : CharacterClass
+public class PlayerCharacter : CharacterClass
 {
 
     // GET INPUT SYSTEM
@@ -11,6 +11,7 @@ public class PlayerCharacterClass : CharacterClass
     Rigidbody _rb;
     CapsuleCollider _cpslClldr;
     GroundedDetection _GroundDetetction;
+    PlayerShootController _ShootScript;
 
     [Header("-----PLAYER MOVEMENT------")]
     public float BackWalkSpeed = 0.5f;
@@ -27,10 +28,9 @@ public class PlayerCharacterClass : CharacterClass
         _cpslClldr = GetComponent<CapsuleCollider>();
 
         _GroundDetetction = GetComponent<GroundedDetection>();
+        _ShootScript = GetComponent<PlayerShootController>();
 
     }
-
-
     public override Vector3 Movement(){
 
         // READ PLAYER INPUT AND APLY SPEED
@@ -66,9 +66,11 @@ public class PlayerCharacterClass : CharacterClass
     }
 
     private void Update(){
+        
         Jump();
-
-
+        //SHOOTING
+        _ShootScript.Shoot();
+        _ShootScript.Reload();
 
 
     }
@@ -76,12 +78,6 @@ public class PlayerCharacterClass : CharacterClass
         transform.position += Movement();
         // REVISAR EN CLASE
         if (_GroundDetetction.Grounded) JumpCount = 0;
-
-
-    }
-    private void LateUpdate()
-    {
-
     }
 
 }
