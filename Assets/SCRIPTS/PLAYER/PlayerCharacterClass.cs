@@ -10,12 +10,11 @@ public class PlayerCharacterClass : CharacterClass
     // COMPONENTS
     Rigidbody _rb;
     CapsuleCollider _cpslClldr;
+    GroundedDetection _GroundDetetction;
 
     [Header("-----PLAYER MOVEMENT------")]
     public float BackWalkSpeed = 0.5f;
     public float SideWalkSpeed = 0.75f;
-    public float DashForce;
-
 
     private void Start()
     {
@@ -23,39 +22,19 @@ public class PlayerCharacterClass : CharacterClass
         _input = new InputSystem_Actions();
         _input.Enable();
 
+        // GET COMPONENTES
         _rb = GetComponent<Rigidbody>();
         _cpslClldr = GetComponent<CapsuleCollider>();
 
+        _GroundDetetction = GetComponent<GroundedDetection>();
 
     }
 
-    public void Dash(){
-        // READ PLAYER INPUT
-        Vector2 DashDir = _input.Player.Move.ReadValue<Vector2>();
-        // SET TO LOCAL INSTEAD OF WORLD
-        DashDir = transform.TransformDirection(DashDir);
-
-
-        if (_input.Player.Dash.WasPressedThisFrame()){
-            Debug.Log("DASH");
-
-            if (DashDir.y > 0 && DashDir.x == 0 || DashDir.y == 1){ // INPUT IS FORWARD
-                _rb.AddForce(transform.forward * DashForce, ForceMode.VelocityChange);
-
-            }else if (DashDir.x > 0 && DashDir.y < 1){ // INPUT IS RIGHT
-                _rb.AddForce(transform.forward * DashForce, ForceMode.VelocityChange);
-
-            }else if (DashDir.x > 0 && DashDir.y < 1){ // INPUT IS LEFYT
-                _rb.AddForce(transform.forward * DashForce, ForceMode.VelocityChange);
-                _rb.linearVelocity = Vector3.zero;
-            }
-        }
-
-    }
 
     public override Vector3 Movement(){
+
         // READ PLAYER INPUT AND APLY SPEED
-        Vector3 inputDir = _input.Player.Move.ReadValue<Vector2>() * getWalkingSpeed();
+        Vector3 inputDir = _input.Player.Move.ReadValue<Vector2>() * WalkingSpeed;
         
         // READ "z" AS "y"
         inputDir.z = inputDir.y;
@@ -73,21 +52,35 @@ public class PlayerCharacterClass : CharacterClass
         return inputDir * Time.deltaTime;
     }
 
-    public override void Jump(){
-        Debug.Log("JUMP");
-        if(_input.Player.Jump.WasPressedThisFrame())
-        _rb.AddForce(Vector3.up * DashForce, ForceMode.VelocityChange);
-
-
+    public override void Jump()
+    {
+        // JUMP INPUT
+        if (_input.Player.Jump.WasPressedThisFrame() && JumpCount < JumpCountMax)
+        {
+            // VERTICAL FORCE
+            _rb.AddForce(Vector3.up * JumpForce);
+                        
+            // JUMP COUNT
+            JumpCount++;
+        }
     }
 
     private void Update(){
-        Dash();
+        Jump();
+
+
+
 
     }
-
     private void FixedUpdate(){
         transform.position += Movement();
+        // REVISAR EN CLASE
+        if (_GroundDetetction.Grounded) JumpCount = 0;
+
+
+    }
+    private void LateUpdate()
+    {
 
     }
 

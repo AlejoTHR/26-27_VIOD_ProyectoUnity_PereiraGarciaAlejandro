@@ -1,38 +1,40 @@
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GroundedDetection : MonoBehaviour
 {
 
     [Header("------Detectiom------")]
+    public bool Grounded = false;
+
     public Vector3 GroundDetectionDistanceOffset;
     public float GroundDetectionRadius;
     public float GroundDetectionDistance;
-    public bool Grounded = false;
     public LayerMask Detect;
 
     public bool IsGrounded()
     {
+        bool DetectsGround;
         // GROUND DETECTION
         RaycastHit hit;
         Physics.SphereCast(transform.position + GroundDetectionDistanceOffset, GroundDetectionRadius, Vector3.down, out hit, GroundDetectionDistance, Detect);
 
         // SEND SPHERECAST FOR DETECTION
-        if (Physics.SphereCast(transform.position + GroundDetectionDistanceOffset, GroundDetectionRadius, Vector3.down, out hit, GroundDetectionDistance, Detect))
-        {
-            Grounded = true;
+        if (Physics.SphereCast(transform.position + GroundDetectionDistanceOffset, GroundDetectionRadius, Vector3.down, out hit, GroundDetectionDistance, Detect)){
+
+            DetectsGround = true;
         }
-        else
-        {
-            Grounded = false;
+        else{
+
+            DetectsGround = false;
         }
 
-        return Grounded;
+        return DetectsGround;
     }
-
-    private void Update()
+    private void LateUpdate()
     {
-        Debug.Log(IsGrounded());
+        Grounded = IsGrounded();
     }
 
 
