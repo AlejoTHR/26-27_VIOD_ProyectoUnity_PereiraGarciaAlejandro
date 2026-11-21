@@ -1619,8 +1619,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2117382930}
   - component: {fileID: 2117382932}
-  - component: {fileID: 2117382931}
   - component: {fileID: 2117382933}
+  - component: {fileID: 2117382931}
   m_Layer: 5
   m_Name: Ammo
   m_TagString: Untagged
@@ -1759,6 +1759,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cacd2683845b9fc409077084ae4f0cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_PrintAmmunition
+  _playerShoot: {fileID: 1555361727}
+  UI_AmmoText: {fileID: 2117382931}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
